@@ -30,7 +30,7 @@ sudo apt-get install -y bless
 O `bless` é um programa com interface gráfica, então pode não funcionar
 em versões antigas do WSL ou em outros ambientes sem interface gráfica. 
 Caso não consiga executar, é possível codificar textos em hexadecimal 
-com 2 btytes por linha usando a seguinte função em Python 3
+com 2 bytes por linha usando a seguinte função em Python 3
 ```python
 def string_to_two_byte_hex(string: str):
     string_bytes = string.encode('ascii')
