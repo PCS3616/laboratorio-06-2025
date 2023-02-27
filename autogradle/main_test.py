@@ -77,7 +77,7 @@ def run_dumper(encode_bytes: bytes, base_addres=0x0d00):
     dumper_file = submission_path / "dumper.mvn"
     assert dumper_file.exists(), f"A submissão não contém o arquivo '{dumper_file.name}'"
 
-    data_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+    data_file = tempfile.NamedTemporaryFile(mode='w')
     data_file.writelines([
         f"0704	{base_addres:04X}\n", # enderelo inicial
         f"0706	{len(encode_bytes)//2:04X}\n", # qtd. de palavras
@@ -88,14 +88,14 @@ def run_dumper(encode_bytes: bytes, base_addres=0x0d00):
         data_file.write(line)
     data_file.flush()
 
-    init_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+    init_file = tempfile.NamedTemporaryFile(mode='w')
     init_file.writelines([
         "0000	a700\n",
         "0002	c000\n",
     ])
     init_file.flush()
 
-    out_file = tempfile.NamedTemporaryFile(mode='rb', delete=False)
+    out_file = tempfile.NamedTemporaryFile(mode='rb')
 
     # print(data_file.name, init_file.name, out_file.name)
 
@@ -143,11 +143,11 @@ def run_loader(decode_bytes: bytes, base_addres=0x0d00):
     loader_file = submission_path / "loader.mvn"
     assert loader_file.exists(), f"A submissão não contém o arquivo '{loader_file.name}'"
 
-    data_file = tempfile.NamedTemporaryFile(mode='wb', delete=False)
+    data_file = tempfile.NamedTemporaryFile(mode='wb')
     data_file.write(decode_bytes)
     data_file.flush()
 
-    init_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
+    init_file = tempfile.NamedTemporaryFile(mode='w')
     init_file.writelines([
         "0000	ab00\n",
         "0002	c000\n",
@@ -157,7 +157,7 @@ def run_loader(decode_bytes: bytes, base_addres=0x0d00):
     ])
     init_file.flush()
 
-    out_file = tempfile.NamedTemporaryFile(mode='rb', delete=False)
+    out_file = tempfile.NamedTemporaryFile(mode='rb')
 
     # print(data_file.name, init_file.name, out_file.name)
 
@@ -192,27 +192,24 @@ def run_loader(decode_bytes: bytes, base_addres=0x0d00):
 def test_dumper_multiple():
     # E vc pensando que não vai usar SD pra nada
     data = [[0xF0, 0xDA] for _ in range(0, 256, 2)]
-    bdata = bytes(flatten(data))
 
-    outbytes = run_dumper(bdata)
+    outbytes = run_dumper(bflatten(data))
     expected = b'DQAAgPDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Np6gAAAAAAAAA=='
-    assert b64encode(outbytes) == expected, f"Seu código não está correto"
+    assert outbytes == b64decode(expected), f"Seu código não está correto"
 
 def test_dumper_non_multiple():
     data = [[0xF0, 0xDA] for _ in range(0, 258, 2)]
-    bdata = bytes(flatten(data))
 
-    outbytes = run_dumper(bdata)
+    outbytes = run_dumper(bflatten(data))
     expected = b'DQAAgPDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Np6gA4AAAHw2v7b'
-    assert b64encode(outbytes) == expected, f"Seu código não está correto"
+    assert outbytes == b64decode(expected), f"Seu código não está correto"
 
 def test_dumper_bigger():
     data = [[x>>8 & 0xFF, x>>0 & 0xFF] for x in range(0, 0x2b0, 2)]
-    bdata = bytes(flatten(data))
 
-    outbytes = run_dumper(bdata)
+    outbytes = run_dumper(bflatten(data))
     expected = b'DQAAgAAAAAIABAAGAAgACgAMAA4AEAASABQAFgAYABoAHAAeACAAIgAkACYAKAAqACwALgAwADIANAA2ADgAOgA8AD4AQABCAEQARgBIAEoATABOAFAAUgBUAFYAWABaAFwAXgBgAGIAZABmAGgAagBsAG4AcAByAHQAdgB4AHoAfAB+AIAAggCEAIYAiACKAIwAjgCQAJIAlACWAJgAmgCcAJ4AoACiAKQApgCoAKoArACuALAAsgC0ALYAuAC6ALwAvgDAAMIAxADGAMgAygDMAM4A0ADSANQA1gDYANoA3ADeAOAA4gDkAOYA6ADqAOwA7gDwAPIA9AD2APgA+gD8AP5NAA4AAIABAAECAQQBBgEIAQoBDAEOARABEgEUARYBGAEaARwBHgEgASIBJAEmASgBKgEsAS4BMAEyATQBNgE4AToBPAE+AUABQgFEAUYBSAFKAUwBTgFQAVIBVAFWAVgBWgFcAV4BYAFiAWQBZgFoAWoBbAFuAXABcgF0AXYBeAF6AXwBfgGAAYIBhAGGAYgBigGMAY4BkAGSAZQBlgGYAZoBnAGeAaABogGkAaYBqAGqAawBrgGwAbIBtAG2AbgBugG8Ab4BwAHCAcQBxgHIAcoBzAHOAdAB0gHUAdYB2AHaAdwB3gHgAeIB5AHmAegB6gHsAe4B8AHyAfQB9gH4AfoB/AH+zgAPAABYAgACAgIEAgYCCAIKAgwCDgIQAhICFAIWAhgCGgIcAh4CIAIiAiQCJgIoAioCLAIuAjACMgI0AjYCOAI6AjwCPgJAAkICRAJGAkgCSgJMAk4CUAJSAlQCVgJYAloCXAJeAmACYgJkAmYCaAJqAmwCbgJwAnICdAJ2AngCegJ8An4CgAKCAoQChgKIAooCjAKOApACkgKUApYCmAKaApwCngKgAqICpAKmAqgCqgKsAq7dQA=='
-    assert b64encode(outbytes) == expected, f"Seu código não está correto"
+    assert outbytes == b64decode(expected), f"Seu código não está correto"
 
 
 def test_loader_multiple():
@@ -220,20 +217,18 @@ def test_loader_multiple():
 
     result = run_loader(b64decode(data))
     expected = bflatten([[0xF0, 0xDA] for _ in range(0, 256, 2)])
-    print(result)
-    print(expected)
-    assert result == expected
+    assert result == expected, f"Seu código não está correto"
 
 def test_loader_non_multiple():
     data = b'DQAAgPDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Nrw2vDa8Np6gA4AAAHw2v7b'
 
     result = run_loader(b64decode(data))
     expected = bflatten([[0xF0, 0xDA] for _ in range(0, 258, 2)])
-    assert result == expected
+    assert result == expected, f"Seu código não está correto"
 
 def test_loader_bigger():
     data = b'DQAAgAAAAAIABAAGAAgACgAMAA4AEAASABQAFgAYABoAHAAeACAAIgAkACYAKAAqACwALgAwADIANAA2ADgAOgA8AD4AQABCAEQARgBIAEoATABOAFAAUgBUAFYAWABaAFwAXgBgAGIAZABmAGgAagBsAG4AcAByAHQAdgB4AHoAfAB+AIAAggCEAIYAiACKAIwAjgCQAJIAlACWAJgAmgCcAJ4AoACiAKQApgCoAKoArACuALAAsgC0ALYAuAC6ALwAvgDAAMIAxADGAMgAygDMAM4A0ADSANQA1gDYANoA3ADeAOAA4gDkAOYA6ADqAOwA7gDwAPIA9AD2APgA+gD8AP5NAA4AAIABAAECAQQBBgEIAQoBDAEOARABEgEUARYBGAEaARwBHgEgASIBJAEmASgBKgEsAS4BMAEyATQBNgE4AToBPAE+AUABQgFEAUYBSAFKAUwBTgFQAVIBVAFWAVgBWgFcAV4BYAFiAWQBZgFoAWoBbAFuAXABcgF0AXYBeAF6AXwBfgGAAYIBhAGGAYgBigGMAY4BkAGSAZQBlgGYAZoBnAGeAaABogGkAaYBqAGqAawBrgGwAbIBtAG2AbgBugG8Ab4BwAHCAcQBxgHIAcoBzAHOAdAB0gHUAdYB2AHaAdwB3gHgAeIB5AHmAegB6gHsAe4B8AHyAfQB9gH4AfoB/AH+zgAPAABYAgACAgIEAgYCCAIKAgwCDgIQAhICFAIWAhgCGgIcAh4CIAIiAiQCJgIoAioCLAIuAjACMgI0AjYCOAI6AjwCPgJAAkICRAJGAkgCSgJMAk4CUAJSAlQCVgJYAloCXAJeAmACYgJkAmYCaAJqAmwCbgJwAnICdAJ2AngCegJ8An4CgAKCAoQChgKIAooCjAKOApACkgKUApYCmAKaApwCngKgAqICpAKmAqgCqgKsAq7dQA=='
 
     result = run_loader(b64decode(data))[:-2]
     expected = bflatten([[x>>8 & 0xFF, x>>0 & 0xFF] for x in range(0, 0x2b0, 2)])
-    assert result == expected
+    assert result == expected, f"Seu código não está correto"
