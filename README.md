@@ -1,21 +1,15 @@
-# PCS3616 - Laboratório 6 - MVN 3
+# PCS3616 - Laboratório 6 - MVN 4
 
 Hoje é a última aula com linguagem de máquina, portanto vai ser a mais
-interessante delas, vamos implementar um dumper e um loader.
+interessante delas, vamos implementar um dumper e/ou um loader.
 
-Nesta aula, você deverá trabalhar **em dupla** para desenvolver dois
-programas escritos na linguagem de máquina da MVN: um dumper e um
-loader.
+Nesta aula, você deverá trabalhar **em dupla** para desenvolver um dos
+seguintes programas: dumper ou loader (basta fazer um apenas).
 
-Um dos membros da dupla será o responsável pelo desenvolvimento do
-dumper e o outro membro será responsável pelo desenvolvimento do loader.
-Ao final do desenvolvimento, estes dois programas deverão funcionar
-corretamente em conjunto.
-
-A especificação completa do funcionamento do loader e dumper está
-disponível nos slides de aula por meio
-[deste link](https://drive.google.com/file/d/1oCtP5S192MhYEdF5Xw-bLgyUAXzcrRaN/view?usp=share_link)
-com acesso liberado somente para emails USP.
+O corretor automático do github sempre testará o dumper e o loader, com isso
+caso a dupla faça apenas um dos programas, o github indicará que algum teste falhou.
+Mas não se preocupe, caso a sua dupla resolva um deles de forma completa, a
+nota da dupla será 10.
 
 ## Ferramentas recomendadas
 
@@ -60,9 +54,6 @@ disp.lst, use a seguinte linha:
     -   `0x706`: Parâmetro "qtd. de palavras"
 
 -   Quantidade máxima de **bytes de dados** por bloco: 256 (128 palavras).
-
-    - Os slides anteriormente mencionavam 64 palavras por bloco, mas
-    sua implementação deve usar 128.
 
 -   Ambas as funções devem ser codificadas como subrotinas.
 
