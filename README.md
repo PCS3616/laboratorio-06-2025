@@ -37,6 +37,8 @@ e é possível visualizar um arquivo em binário usando o utilirário do Linux
 hexdump -C ARQUIVO
 ```
 
+Um exemplo de arquivo binário `.dat` - seguindo os padrões de dump da MVN - foi disponibilizado nesse repositório com o nome `ex.dat`. Este arquivo serve tanto como exemplo de output do dumper, como de input para o loader.
+
 ## Instruções
 
 -   Vamos usar a seguinte convenção: os dois programas (dumper e loader)
