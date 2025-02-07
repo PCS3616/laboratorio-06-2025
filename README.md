@@ -1,7 +1,6 @@
 # PCS3616 - Laboratório 6 - MVN 4
 
-Hoje é a última aula com linguagem de máquina, portanto vai ser a mais
-interessante delas, vamos implementar um dumper e/ou um loader.
+Hoje vamos implementar um dumper e/ou um loader.
 
 Nesta aula, você deverá trabalhar **em dupla** para desenvolver um dos
 seguintes programas: dumper ou loader (basta fazer um apenas).
@@ -22,8 +21,8 @@ sudo apt-get install -y bless
 ```
 
 O `bless` é um programa com interface gráfica, então pode não funcionar
-em versões antigas do WSL ou em outros ambientes sem interface gráfica. 
-Caso não consiga executar, é possível codificar textos em hexadecimal 
+em versões antigas do WSL ou em outros ambientes sem interface gráfica.
+Caso não consiga executar, é possível codificar textos em hexadecimal
 com 2 bytes por linha usando a seguinte função em Python 3
 ```python
 def string_to_two_byte_hex(string: str):
@@ -60,5 +59,5 @@ disp.lst, use a seguinte linha:
 -   Ambas as funções devem ser codificadas como subrotinas.
 
 ## Entrega
-- Arquivo `dumper.mvn` com o dumper
-- Arquivo `loader.mvn` com o loader
+- Arquivo `dumper.asm` com o dumper
+- Arquivo `loader.asm` com o loader
