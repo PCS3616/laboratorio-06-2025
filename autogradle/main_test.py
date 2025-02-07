@@ -24,7 +24,7 @@ def bflatten(lls):
     return bytes(flatten(lls))
 
 def clean_memory_dump(btext: bytes):
-    text = btext.decode("utf-8") 
+    text = btext.decode("utf-8")
     print(text)
     lines = text.split('\n')[:-1]
 
@@ -59,23 +59,37 @@ def clean_memory_dump(btext: bytes):
     return bytes(result)
 
 
+def mvn_cli(arguments: list[str], output_filepath: str | Path):
+    command = f"./mvn-cli {' '.join(arguments)} || mvn-cli {' '.join(arguments)}"
+    with open(output_filepath, "w", encoding="utf8") as output_file:
+        subprocess.run(command, shell=True, check=True, stdout=output_file)
+
+
+def executable(main: Path) -> Path:
+  asm_program_filepath = Path(f"{main}.asm")
+  executable_filepath = Path(f"{main}.mvn")
+
+  assert asm_program_filepath.exists(), f"A submissão não contém o arquivo '{asm_program_filepath.name}'"
+
+  mvn_cli(f"assemble -i {main}.asm".split(), executable_filepath)
+  return executable_filepath
+
 
 def run_mvn(input_text):
     p = subprocess.run(
         [
-            "python", 
-            "-m", 
+            "python",
+            "-m",
             "MVN.mvnMonitor"
         ],
         input=input_text,
-        capture_output=True, 
+        capture_output=True,
         text=True,
     )
     return p.stdout
 
 def run_dumper(encode_bytes: bytes, base_addres=0x0d00):
-    dumper_file = submission_path / "dumper.mvn"
-    assert dumper_file.exists(), f"A submissão não contém o arquivo '{dumper_file.name}'"
+    dumper_file = executable(submission_path / "dumper")
 
     data_file = tempfile.NamedTemporaryFile(mode='w')
     data_file.writelines([
@@ -140,8 +154,7 @@ def run_loader(decode_bytes: bytes, base_addres=0x0d00):
     n_words = n_bytes//2
     # print("n_bytes", n_bytes) # 688
 
-    loader_file = submission_path / "loader.mvn"
-    assert loader_file.exists(), f"A submissão não contém o arquivo '{loader_file.name}'"
+    loader_file = executable(submission_path / "loader")
 
     data_file = tempfile.NamedTemporaryFile(mode='wb')
     data_file.write(decode_bytes)
