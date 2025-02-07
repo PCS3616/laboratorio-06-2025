@@ -1,0 +1,3 @@
+[submodule "MVN"]
+	path = MVN
+	url = git@github.com:PCS3616/MVN.git
