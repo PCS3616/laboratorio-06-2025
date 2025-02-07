@@ -1,0 +1,98 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: t0
+      id: t0
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test_dumper_multiple
+        setup-command: (git clone https://github.com/PCS3616/MVN.git || true) && sudo
+          -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest
+          | grep browser_download_url | grep mvn-cli | cut -d '"' -f 4) && chmod +x
+          mvn-cli
+        command: pytest -k "test_dumper_multiple"
+        timeout: 10
+        max-score: 3
+    - name: t1
+      id: t1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test_dumper_non_multiple
+        setup-command: (git clone https://github.com/PCS3616/MVN.git || true) && sudo
+          -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest
+          | grep browser_download_url | grep mvn-cli | cut -d '"' -f 4) && chmod +x
+          mvn-cli
+        command: pytest -k "test_dumper_non_multiple"
+        timeout: 10
+        max-score: 3
+    - name: t2
+      id: t2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test_dumper_bigger
+        setup-command: (git clone https://github.com/PCS3616/MVN.git || true) && sudo
+          -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest
+          | grep browser_download_url | grep mvn-cli | cut -d '"' -f 4) && chmod +x
+          mvn-cli
+        command: pytest -k 'test_dumper_bigger'
+        timeout: 10
+        max-score: 4
+    - name: t3
+      id: t3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test_loader_multiple
+        setup-command: (git clone https://github.com/PCS3616/MVN.git || true) && sudo
+          -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest
+          | grep browser_download_url | grep mvn-cli | cut -d '"' -f 4) && chmod +x
+          mvn-cli
+        command: pytest -k "test_loader_multiple"
+        timeout: 10
+        max-score: 3
+    - name: t4
+      id: t4
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test_loader_non_multiple
+        setup-command: (git clone https://github.com/PCS3616/MVN.git || true) && sudo
+          -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest
+          | grep browser_download_url | grep mvn-cli | cut -d '"' -f 4) && chmod +x
+          mvn-cli
+        command: pytest -k "test_loader_non_multiple"
+        timeout: 10
+        max-score: 3
+    - name: t5
+      id: t5
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test_loader_bigger
+        setup-command: (git clone https://github.com/PCS3616/MVN.git || true) && sudo
+          -H pip3 install pytest && curl -LO $(curl -s https://api.github.com/repos/PCS3616/mvn-rs/releases/latest
+          | grep browser_download_url | grep mvn-cli | cut -d '"' -f 4) && chmod +x
+          mvn-cli
+        command: pytest -k 'test_loader_bigger'
+        timeout: 10
+        max-score: 4
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        T0_RESULTS: "${{steps.t0.outputs.result}}"
+        T1_RESULTS: "${{steps.t1.outputs.result}}"
+        T2_RESULTS: "${{steps.t2.outputs.result}}"
+        T3_RESULTS: "${{steps.t3.outputs.result}}"
+        T4_RESULTS: "${{steps.t4.outputs.result}}"
+        T5_RESULTS: "${{steps.t5.outputs.result}}"
+      with:
+        runners: t0,t1,t2,t3,t4,t5
