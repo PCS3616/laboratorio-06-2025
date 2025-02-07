@@ -14,13 +14,13 @@ nota da dupla será 10.
 
 Um editor de texto normal (como `vim`) não foi desenvolvido para a edição
 de arquivos não-texto. Assim, é recomendado utilizar outro editor, como
-o `bless`, que pode ser instalado executando
+o `ghex`, que pode ser instalado executando
 ```bash
 sudo apt-get update
-sudo apt-get install -y bless
+sudo apt-get install -y ghex
 ```
 
-O `bless` é um programa com interface gráfica, então pode não funcionar
+O `ghex` é um programa com interface gráfica, então pode não funcionar
 em versões antigas do WSL ou em outros ambientes sem interface gráfica.
 Caso não consiga executar, é possível codificar textos em hexadecimal
 com 2 bytes por linha usando a seguinte função em Python 3
@@ -30,7 +30,7 @@ def string_to_two_byte_hex(string: str):
     string_hex = string_bytes.hex('\n', 2)  # \n every 2 bytes
     print(string_hex)
 ```
-e é possível visualizar um arquivo em binário usando o utilirário do Linux
+e é possível visualizar um arquivo em binário usando o utilitário do Linux
 `hexdump`, executando
 ```bash
 hexdump -C ARQUIVO
